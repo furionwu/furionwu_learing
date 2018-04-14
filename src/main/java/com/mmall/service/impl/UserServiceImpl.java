@@ -8,6 +8,7 @@ import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -153,6 +154,15 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createBySuccess("更新个人信息成功",updateUser);
         }
         return ServerResponse.createByErrorMessage("更新个人信息失败");
+    }
+
+    public ServerResponse<User> get_infomation(Integer userId){
+        User user = userMapper.selectByPrimaryKey(userId);
+        if(user==null){
+            return ServerResponse.createByErrorMessage("找不到当前用户");
+        }
+        user.setPassword(org.apache.commons.lang3.StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
     }
 
 
