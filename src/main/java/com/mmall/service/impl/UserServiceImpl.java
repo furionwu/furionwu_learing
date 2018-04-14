@@ -62,18 +62,20 @@ public class UserServiceImpl implements IUserService {
                 if (resultCount > 0) {
                     return ServerResponse.createByErrorMessage("用户名已存在");
                 }
-            }
-            if (Const.EMAIL.equals(type)) {
+            }else if (Const.EMAIL.equals(type)) {
                 int resultCount = userMapper.checkEmail(str);
                 if (resultCount > 0) {
                     return ServerResponse.createByErrorMessage("EMAIL已存在");
                 }
 
+            }else {
+                return ServerResponse.createByErrorMessage("参数错误");
             }
 
         } else {
             return ServerResponse.createByErrorMessage("参数错误");
         }
+
         return ServerResponse.createBySuccessMessage("校验成功");
     }
 
