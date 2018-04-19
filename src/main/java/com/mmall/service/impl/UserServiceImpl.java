@@ -129,10 +129,10 @@ public class UserServiceImpl implements IUserService {
 
     public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user) {
         int resultCount = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(passwordOld), user.getId());
-        if (resultCount < 0) {
+        if (resultCount <= 0) {
             return ServerResponse.createByErrorMessage("旧密码错误");
         }
-        user.setPassword(passwordNew);
+        user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew));
         int updateCount = userMapper.updateByPrimaryKeySelective(user);
         if (updateCount > 0) {
             return ServerResponse.createByErrorMessage("密码更新成功");
