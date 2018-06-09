@@ -14,6 +14,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+
+/**
+ * class_name: UserServiceImpl
+ * package: com.mmall.service.impl
+ * describe: TODO
+ * creat_user: furionwu
+ * creat_date: 2018/5/26
+ * creat_time: 18:06
+ **/
+
 @Service("iUserService")
 public class UserServiceImpl implements IUserService {
 
@@ -62,13 +72,13 @@ public class UserServiceImpl implements IUserService {
                 if (resultCount > 0) {
                     return ServerResponse.createByErrorMessage("用户名已存在");
                 }
-            }else if (Const.EMAIL.equals(type)) {
+            } else if (Const.EMAIL.equals(type)) {
                 int resultCount = userMapper.checkEmail(str);
                 if (resultCount > 0) {
                     return ServerResponse.createByErrorMessage("EMAIL已存在");
                 }
 
-            }else {
+            } else {
                 return ServerResponse.createByErrorMessage("参数错误");
             }
 
@@ -141,8 +151,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     public ServerResponse<User> update_information(User user) {
-        int resultCount = userMapper.checkEmailByUserId(user.getEmail(),user.getId());
-        if(resultCount>0){
+        int resultCount = userMapper.checkEmailByUserId(user.getEmail(), user.getId());
+        if (resultCount > 0) {
             return ServerResponse.createByErrorMessage("email已经存在，请更换email在尝试更新");
         }
         User updateUser = new User();
@@ -152,19 +162,36 @@ public class UserServiceImpl implements IUserService {
         updateUser.setQuestion(user.getQuestion());
         updateUser.setAnswer(user.getAnswer());
         int updateCount = userMapper.updateByPrimaryKeySelective(updateUser);
-        if(updateCount>0){
-            return ServerResponse.createBySuccess("更新个人信息成功",updateUser);
+        if (updateCount > 0) {
+            return ServerResponse.createBySuccess("更新个人信息成功", updateUser);
         }
         return ServerResponse.createByErrorMessage("更新个人信息失败");
     }
 
-    public ServerResponse<User> get_infomation(Integer userId){
+
+  
+  
+  /**  
+   * @author furionwu
+   * @date 2018/5/26 18:11  
+   * @param   
+   * @return   
+   */  
+    public ServerResponse<User> get_infomation(Integer userId) {
         User user = userMapper.selectByPrimaryKey(userId);
-        if(user==null){
+        if (user == null) {
             return ServerResponse.createByErrorMessage("找不到当前用户");
         }
         user.setPassword(org.apache.commons.lang3.StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
+    }
+
+    //backend
+    public ServerResponse checkAdminRole(User user) {
+        if (user != null && user.getRole().intValue() == Const.Role.ROLE_ADMIN) {
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
     }
 
 

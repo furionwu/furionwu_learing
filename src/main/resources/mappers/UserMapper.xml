@@ -20,7 +20,7 @@
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List"></include>
     from mmall_user
     where id = #{id,jdbcType=INTEGER}
   </select>
