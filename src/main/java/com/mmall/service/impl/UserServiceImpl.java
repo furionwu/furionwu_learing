@@ -18,7 +18,6 @@ import java.util.UUID;
 /**
  * class_name: UserServiceImpl
  * package: com.mmall.service.impl
- * describe: TODO
  * creat_user: furionwu
  * creat_date: 2018/5/26
  * creat_time: 18:06

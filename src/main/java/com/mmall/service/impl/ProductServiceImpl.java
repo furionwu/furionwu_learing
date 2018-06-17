@@ -86,7 +86,7 @@ public class ProductServiceImpl implements IProductService {
 
     }
 
-//todo 添加response泛型参数和直接用productListVoList
+//todo 添加response泛型参数和直接用productListVoList 和Lists.new new ArrayList<>()
     public ServerResponse getProductList(int pageNum,int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Product> productList = productMapper.selectList();
@@ -141,5 +141,21 @@ public class ProductServiceImpl implements IProductService {
         productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));
         productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
         return productDetailVo;
+    }
+
+    public ServerResponse<PageInfo> serachProduct(String productName,Integer productId,Integer pageNum,Integer pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        List<ProductListVo> productListVoList = new ArrayList<>();
+        if(StringUtils.isNotBlank(productName)){
+            productName = new StringBuilder().append("%").append(productName).append("%").toString();
+        }
+        List<Product> productList= productMapper.selectByProductNameAndProductId(productName,productId);
+        for (Product productItem:productList) {
+            ProductListVo productListVo = assembleProductListVo(productItem);
+            productListVoList.add(productListVo);
+        }
+        PageInfo pageResult = new PageInfo(productList);
+        pageResult.setList(productListVoList);
+        return ServerResponse.createBySuccess(pageResult);
     }
 }
